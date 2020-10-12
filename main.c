@@ -4,6 +4,7 @@
 
 typedef char string [50];
 
+/*
 void pokreate( int n ){
   string pknames [] = { "Magikarp","Gyarados","Tentacool","Tentacruel","Goldeen","Seaking","Wailmer","Wailord","Kyogre" };
   string colors [] = { "Rojo", "Azul", "Amarillo", "Verde", "Naranja", "Violeta", "Blanco", "Negro", "Dorado" };
@@ -18,10 +19,10 @@ void pokreate( int n ){
 
   fclose(arrecife_f);
 }
+*/
 
 int main(int argc, char const *argv[]) {
 
-  pokreate(100);
-
+  
   return 0;
 }
