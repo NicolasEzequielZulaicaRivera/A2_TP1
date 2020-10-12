@@ -44,6 +44,13 @@ int trasladar_pokemon(arrecife_t* arrecife, acuario_t* acuario, bool (*seleccion
  * Procedimiento que dado un arrecife deberá mostrar por pantalla a todos los pokemon que contiene.
  */
 void censar_arrecife(arrecife_t* arrecife, void (*mostrar_pokemon)(pokemon_t*)){
+
+
+  for( int i=0; i < arrecife->cantidad_pokemon; i++ ){
+    mostrar_pokemon( & (arrecife->pokemon[i]) );
+    printf("---- %i / %i\n",i,arrecife->cantidad_pokemon);
+  }
+
   return;
 }
 
