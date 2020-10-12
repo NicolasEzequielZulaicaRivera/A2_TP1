@@ -6,7 +6,7 @@ NAME = evento_pesca
 clear:
 	clear
 
-evento_pesca:
+evento_pesca: $(FILES)
 	$(CC) $(FILES) $(FLAGS) -o evento_pesca
 
 run: evento_pesca
