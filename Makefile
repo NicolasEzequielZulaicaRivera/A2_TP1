@@ -13,4 +13,4 @@ run: evento_pesca
 	./evento_pesca
 
 check: evento_pesca
-	valgrind --leak -check=full --track -origins=yes --show -reachable=yes ./evento_pesca
+	valgrind --leak-check=full --track-origins=yes --show-reachable=yes ./evento_pesca

@@ -5,6 +5,12 @@ typedef char string [50];
 const string FORMATO_LECTURA_POKEMON = "%[^;];%i;%i;%[^\n]\n";
 //const string FORMATO_ESCRITURA_POKEMON = "%s;%i;%i;%s\n";
 
+
+int leer_pokemon( FILE* archivo, pokemon_t* pokemon ){
+
+  return fscanf( archivo, FORMATO_LECTURA_POKEMON, pokemon->especie, &pokemon->velocidad, &pokemon->peso, pokemon->color ) == 4 ;
+}
+
 /*
  * Función que dado un archivo carga los pokémon que viven en el arrecife
  * reservando la memoria necesaria para el mismo. Se debe intentar leer la mayor
@@ -21,18 +27,29 @@ arrecife_t* crear_arrecife(const char* ruta_archivo){
   if( !archivo )
     return NULL;
 
-  pokemon_t aux;
-  int i =0;
+  size_t i = 0;
+  pokemon_t pokemon_i;
 
-  while (
-    fscanf( archivo, FORMATO_LECTURA_POKEMON, aux.especie, &aux.velocidad, &aux.peso, aux.color ) == 4
-  ) {
-    printf("%i%s\n",++i, aux.especie );
+  arrecife_t* nuevo_arrecife = malloc( sizeof(arrecife_t) );
+  nuevo_arrecife->pokemon = NULL;
+
+  while ( leer_pokemon( archivo, &pokemon_i ) ) {
+
+    void* aux = realloc( nuevo_arrecife->pokemon, sizeof(pokemon_t)*(i+1) );
+    if(!aux){
+      liberar_arrecife(nuevo_arrecife);
+      return NULL;
+    }
+
+    nuevo_arrecife->pokemon= aux;
+    nuevo_arrecife->pokemon[i] = pokemon_i;
+    i++;
   }
+  nuevo_arrecife->cantidad_pokemon = (int)i;
 
   fclose(archivo);
 
-  return NULL;
+  return nuevo_arrecife;
 }
 
 /*
@@ -65,7 +82,7 @@ int trasladar_pokemon(arrecife_t* arrecife, acuario_t* acuario, bool (*seleccion
  */
 void censar_arrecife(arrecife_t* arrecife, void (*mostrar_pokemon)(pokemon_t*)){
 
-  if( !arrecife )
+  if( !arrecife || !arrecife->pokemon)
     return;
 
   int i;

@@ -19,16 +19,13 @@ void datos_pokemon( pokemon_t* pokemon ){
 int main(int argc, char const *argv[]) {
 
   srand( (unsigned int) time(NULL) );
-  arrecife_t* arrecife = NULL;
 
-  arrecife = crear_arrecife( ARCHIVO_ARRECIFE_DEFAULT );
+  arrecife_t* arrecife = crear_arrecife( ARCHIVO_ARRECIFE_DEFAULT );
+  if( !arrecife ) return -1;
 
-  if( arrecife )
-    printf("si\n");
+  censar_arrecife( arrecife, datos_pokemon );
 
-  //censar_arrecife( arrecife, datos_pokemon );
-
-  //liberar_arrecife( arrecife);
+  liberar_arrecife( arrecife );
 
   return 0;
 }
