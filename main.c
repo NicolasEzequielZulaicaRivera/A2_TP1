@@ -10,7 +10,7 @@ typedef char string [MAX_STRING_SIZE];
 const string ARCHIVO_ARRECIFE_DEFAULT = "arrecife.txt";
 const string ARCHIVO_ACUARIO_DEFAULT = "acuario.txt";
 
-const string ESTILOS [] = { "\e[1;100m", "\e[1;108m" };
+const string ESTILOS [] = { "\e[1;108m", "\e[1;100m", "\e[1;103m" };
 const string RESET = "\e[0m";
 
 /// DECLARACIONES
@@ -20,10 +20,12 @@ const string RESET = "\e[0m";
 bool seleccionar_todos( pokemon_t* pokemon );
 bool seleccionar_velocez( pokemon_t* pokemon );
 bool seleccionar_pesados( pokemon_t* pokemon );
+bool seleccionar_fuertes( pokemon_t* pokemon );
 bool seleccionar_dorados( pokemon_t* pokemon );
 
 // FUNCIONES DE VISUALIZACION
 
+void tabla_pokemon( pokemon_t* pokemon );
 void datos_pokemon( pokemon_t* pokemon );
 
 
@@ -43,16 +45,20 @@ int main(int argc, char const *argv[]) {
 
   censar_arrecife( arrecife, datos_pokemon );
 
-  trasladar_pokemon( arrecife, acuario, seleccionar_todos, 5);
-  censar_arrecife( arrecife, datos_pokemon );
-  trasladar_pokemon( arrecife, acuario, seleccionar_velocez, 5);
+  trasladar_pokemon( arrecife, acuario, seleccionar_todos, 20);
+  censar_arrecife( arrecife, tabla_pokemon );
+
+  trasladar_pokemon( arrecife, acuario, seleccionar_velocez, 20);
   censar_arrecife( arrecife, datos_pokemon );
 
-  trasladar_pokemon( arrecife, acuario, seleccionar_pesados, 5);
+  trasladar_pokemon( arrecife, acuario, seleccionar_pesados, 20);
   censar_arrecife( arrecife, datos_pokemon );
 
-  trasladar_pokemon( arrecife, acuario, seleccionar_dorados, 5);
+  trasladar_pokemon( arrecife, acuario, seleccionar_fuertes, 20);
   censar_arrecife( arrecife, datos_pokemon );
+
+  trasladar_pokemon( arrecife, acuario, seleccionar_dorados, 20);
+  censar_arrecife( arrecife, tabla_pokemon );
 
   guardar_datos_acuario( acuario, ARCHIVO_ACUARIO_DEFAULT);
 
@@ -75,6 +81,9 @@ bool seleccionar_velocez( pokemon_t* pokemon ){
 bool seleccionar_pesados( pokemon_t* pokemon ){
   return pokemon->peso > 50;
 }
+bool seleccionar_fuertes( pokemon_t* pokemon ){
+  return seleccionar_velocez(pokemon) && seleccionar_pesados(pokemon);
+}
 bool seleccionar_dorados( pokemon_t* pokemon ){
   return !strcmp(pokemon->color,"Dorado");
 }
@@ -82,6 +91,28 @@ bool seleccionar_dorados( pokemon_t* pokemon ){
 // FUNCIONES DE VISUALIZACION
 
 void datos_pokemon( pokemon_t* pokemon ){
+
+  printf("%s", ESTILOS[ !strcmp( pokemon->especie, "Kyogre" ) %2 *2 ] );
+  printf("\t %s " , pokemon->especie);
+  printf("%s", RESET );
+
+  printf("%s", ESTILOS[ (pokemon->velocidad%100)*(pokemon->velocidad%100) / 4000  ] );
+  printf("\t%im/s" , pokemon->velocidad);
+  printf("%s", RESET );
+
+  printf("%s", ESTILOS[ (pokemon->peso%100)*(pokemon->peso%100) / 4000 ] );
+  printf("\t%ikg" , pokemon->peso);
+  printf("%s", RESET );
+
+  printf("%s", ESTILOS[ !strcmp( pokemon->color, "Dorado" ) %2 *2 ] );
+  printf("\t %s " , pokemon->color );
+  printf("%s", RESET );
+
+  printf(" \n");
+  return;
+}
+
+void tabla_pokemon( pokemon_t* pokemon ){
 
   static int n_fondo = 0;
   n_fondo = (n_fondo+1)%2;

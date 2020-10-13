@@ -4,13 +4,27 @@
 
 #define MAX_STRING_SIZE 50
 typedef char string [MAX_STRING_SIZE];
-const string FORMATO_LECTURA_POKEMON = "%[^;];%i;%i;%[^\n]\n";
+const string FORMATO_LECTURA_POKEMON = "%50[^;];%i;%i;%50[^\n]\n";
+
+const pokemon_t POKEMON_INVALIDO = {
+  .especie = "",
+  .velocidad = -1,
+  .peso = -1,
+  .color = ""
+};
 
 /// DECLARACIONES PRIVADAS
 
 // Lee un pokemon de un archivo formateado scsv correctamente
 // Devuelve el estado de la lectura ( 0 = Error )
 int leer_pokemon( FILE* archivo, pokemon_t* pokemon );
+
+// Agrega un pokemon a un acuario
+// Devuelve 0 si falla
+int agregar_pokemon( acuario_t* acuario, pokemon_t pokemon );
+
+// Devuelve si es in pokemon valido
+bool pokemon_valido( pokemon_t pokemon );
 
 /// IMPLEMENTACIONES PUBLICAS
 
@@ -64,7 +78,7 @@ int trasladar_pokemon(arrecife_t* arrecife, acuario_t* acuario, bool (*seleccion
   pokemon_t pokemon_i;
 
   for( i=0; i < arrecife->cantidad_pokemon; i++)
-    if( seleccionados<cant_seleccion && seleccionar_pokemon( &(arrecife->pokemon[i]) ) )
+    if( seleccionados<cant_seleccion && pokemon_valido(arrecife->pokemon[i]) && seleccionar_pokemon( &(arrecife->pokemon[i]) ) )
       seleccion[ seleccionados++ ] = i;
 
   if( seleccionados == cant_seleccion ){
@@ -72,17 +86,9 @@ int trasladar_pokemon(arrecife_t* arrecife, acuario_t* acuario, bool (*seleccion
     for( i=0; i<seleccionados; i++ ){
       pokemon_i = arrecife->pokemon[ seleccion[i] ];
 
-      // agregar al acuario
-      void* aux = realloc( acuario->pokemon, sizeof(pokemon_t)*(size_t)( acuario->cantidad_pokemon +1) );
-      if(!aux) return -1;
-      acuario->pokemon = aux;
-      acuario->pokemon[acuario->cantidad_pokemon ++] = pokemon_i;
+      if( ! agregar_pokemon( acuario, pokemon_i) ) return -1;
 
-      // eliminar del arrecife
-      strcpy(pokemon_i.especie,""); strcpy(pokemon_i.color,"");
-      pokemon_i.velocidad = pokemon_i.peso = -1;
-      arrecife->pokemon[ seleccion[i] ] = pokemon_i;
-
+      arrecife->pokemon[ seleccion[i] ] = POKEMON_INVALIDO;
     }
   }
 
@@ -94,11 +100,14 @@ void censar_arrecife(arrecife_t* arrecife, void (*mostrar_pokemon)(pokemon_t*)){
   if( !arrecife || !arrecife->pokemon)
     return;
 
-  int i;
+  int i, pokemones = 0;
   for( i=0; i < arrecife->cantidad_pokemon; i++ ){
-    mostrar_pokemon( & (arrecife->pokemon[i]) );
+    if( pokemon_valido(arrecife->pokemon[i]) ){
+      mostrar_pokemon( & (arrecife->pokemon[i]) );
+      pokemones++;
+    }
   }
-  printf("\n-El arrecife contiene %i pokemones \n\n", i );
+  printf("\n-El arrecife contiene %i pokemones \n\n", pokemones );
 
   return;
 }
@@ -153,5 +162,24 @@ void liberar_arrecife(arrecife_t* arrecife){
 
 int leer_pokemon( FILE* archivo, pokemon_t* pokemon ){
 
-  return fscanf( archivo, FORMATO_LECTURA_POKEMON, pokemon->especie, &pokemon->velocidad, &pokemon->peso, pokemon->color ) == 4 ;
+  return fscanf( archivo, FORMATO_LECTURA_POKEMON, pokemon->especie, &pokemon->velocidad, &pokemon->peso, pokemon->color ) == 4
+    && !strchr( pokemon->especie, '\n' );
+}
+
+bool pokemon_valido( pokemon_t pokemon ){
+
+  return  strcmp(pokemon.especie,POKEMON_INVALIDO.especie)  ||
+          strcmp(pokemon.color,POKEMON_INVALIDO.color)      ||
+          pokemon.velocidad != POKEMON_INVALIDO.velocidad   ||
+          pokemon.peso != POKEMON_INVALIDO.peso;
+}
+
+int agregar_pokemon( acuario_t* acuario, pokemon_t pokemon ){
+
+  void* aux = realloc( acuario->pokemon, sizeof(pokemon_t)*(size_t)( acuario->cantidad_pokemon +1) );
+  if(!aux) return 0;
+  acuario->pokemon = aux;
+  acuario->pokemon[acuario->cantidad_pokemon ++] = pokemon;
+
+  return 1;
 }
