@@ -10,6 +10,9 @@ typedef char string [MAX_STRING_SIZE];
 const string ARCHIVO_ARRECIFE_DEFAULT = "arrecife.txt";
 const string ARCHIVO_ACUARIO_DEFAULT = "acuario.txt";
 
+const string ESTILOS [] = { "\e[1;100m", "\e[1;108m" };
+const string RESET =  "\e[0m";
+
 /// DECLARACIONES
 
 //FUNCIONES DE SELECCION
@@ -78,7 +81,15 @@ bool seleccionar_dorados( pokemon_t* pokemon ){
 
 void datos_pokemon( pokemon_t* pokemon ){
 
-  printf("\t %s \t %i \t %i \t %s \n", pokemon->especie, pokemon->velocidad, pokemon->peso, pokemon->color );
+  static int n_fondo = 0;
+  n_fondo = (n_fondo+1)%2;
+
+  string fondo;
+  strcpy(fondo, ESTILOS[n_fondo]);
+
+  printf("%s", fondo );
+  printf("\t %s \t %i \t %i \t %s " , pokemon->especie, pokemon->velocidad, pokemon->peso, pokemon->color );
+  printf("%s \n", RESET );
   return;
 }
 
