@@ -72,14 +72,27 @@ acuario_t* crear_acuario(){
  */
 int trasladar_pokemon(arrecife_t* arrecife, acuario_t* acuario, bool (*seleccionar_pokemon) (pokemon_t*), int cant_seleccion){
 
-  int i, seleccionados=0;
-  for( i=0; i < arrecife->cantidad_pokemon; i++){
+  size_t i, seleccionados=0;
+  size_t seleccion [cant_seleccion];
+  pokemon_t pokemon_i;
 
-    if( seleccionados<cant_seleccion && seleccionar_pokemon( &(arrecife->pokemon[i]) ) ){
-      printf("%s\n",arrecife->pokemon[i].especie );
-      seleccionados++;
+  for( i=0; i < arrecife->cantidad_pokemon; i++)
+    if( seleccionados<cant_seleccion && seleccionar_pokemon( &(arrecife->pokemon[i]) ) )
+      seleccion[ seleccionados++ ] = i;
+
+  if( seleccionados == cant_seleccion ){
+
+    for( i=0; i<seleccionados; i++ ){
+      pokemon_i = arrecife->pokemon[ seleccion[i] ];
+
+      void* aux = realloc( acuario->pokemon, sizeof(pokemon_t)*(size_t)( acuario->cantidad_pokemon +1) );
+      if(!aux)
+        return -1;
+
+      acuario->pokemon = aux;
+      acuario->pokemon[acuario->cantidad_pokemon ++] = pokemon_i;
+
     }
-
   }
 
   return 0;
@@ -94,7 +107,7 @@ void censar_arrecife(arrecife_t* arrecife, void (*mostrar_pokemon)(pokemon_t*)){
   for( i=0; i < arrecife->cantidad_pokemon; i++ ){
     mostrar_pokemon( & (arrecife->pokemon[i]) );
   }
-  printf("\n-El arrecife contiene %i pokemones \n", i );
+  printf("\n-El arrecife contiene %i pokemones \n\n", i );
 
   return;
 }
@@ -105,6 +118,8 @@ int guardar_datos_acuario(acuario_t* acuario, const char* nombre_archivo){
     return -2;
 
   FILE* archivo = fopen( nombre_archivo, "w" );
+  if( !archivo )
+    return -1;
 
   int i;
   pokemon_t pokemon_i;

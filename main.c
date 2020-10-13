@@ -46,6 +46,10 @@ int main(int argc, char const *argv[]) {
   printf("\n");
   trasladar_pokemon( arrecife, acuario, seleccionar_pesados, 5);
   printf("\n");
+  trasladar_pokemon( arrecife, acuario, seleccionar_dorados, 5);
+  printf("\n");
+
+  guardar_datos_acuario( acuario, ARCHIVO_ACUARIO_DEFAULT);
 
   liberar_arrecife( arrecife );
   liberar_acuario( acuario );
@@ -74,7 +78,7 @@ bool seleccionar_dorados( pokemon_t* pokemon ){
 
 void datos_pokemon( pokemon_t* pokemon ){
 
-  printf("%s , %i , %i , %s \n", pokemon->especie, pokemon->velocidad, pokemon->peso, pokemon->color );
+  printf("\t %s \t %i \t %i \t %s \n", pokemon->especie, pokemon->velocidad, pokemon->peso, pokemon->color );
   return;
 }
 
