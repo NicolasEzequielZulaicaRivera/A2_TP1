@@ -8,7 +8,6 @@ Goldeen;62;30;Dorado
 Magikarp;29;35;Azul
 Tentacruel;69;58;Rojo
 Wailord;11;56;Azul
-;;;fix
 Tentacool;21;73;Blanco
 Tentacool;98;37;Violeta
 Gyarados;13;70;Amarillo

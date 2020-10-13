@@ -1,4 +1,5 @@
 #include <stdlib.h>
+#include <string.h>
 #include "evento_pesca.h"
 
 #define MAX_STRING_SIZE 50
@@ -57,19 +58,6 @@ acuario_t* crear_acuario(){
 
 }
 
-/*
- * Función que deberá sacar del arrecife a todos los pokémon que satisfagan la
- * condición dada por el puntero a función (que devuelvan true) y trasladarlos
- * hacia el acuario. El parámetro cant_seleccion especifica la cantidad máxima
- * de pokémon que serán trasladados. En caso de que haya menos pokémon trasladables en el
- * arrecife que los pedidos, no se deberá mover ninguno para conservar los pocos existentes.
- * El vector de pokemones del arrecife quedará solo con aquellos que no fueron
- * trasladados (su tamaño se ajustará luego de cada traslado).
- * El vector de pokemones del acuarió quedará con aquellos que fueron
- * trasladados esta vez más los que ya había en el
- * acuario (su tamaño se ajustará luego de cada traslado).
- * Devuelve -1 en caso de error o 0 en caso contrario.
- */
 int trasladar_pokemon(arrecife_t* arrecife, acuario_t* acuario, bool (*seleccionar_pokemon) (pokemon_t*), int cant_seleccion){
 
   size_t i, seleccionados=0;
@@ -85,12 +73,16 @@ int trasladar_pokemon(arrecife_t* arrecife, acuario_t* acuario, bool (*seleccion
     for( i=0; i<seleccionados; i++ ){
       pokemon_i = arrecife->pokemon[ seleccion[i] ];
 
+      // agregar al acuario
       void* aux = realloc( acuario->pokemon, sizeof(pokemon_t)*(size_t)( acuario->cantidad_pokemon +1) );
-      if(!aux)
-        return -1;
-
+      if(!aux) return -1;
       acuario->pokemon = aux;
       acuario->pokemon[acuario->cantidad_pokemon ++] = pokemon_i;
+
+      // eliminar del arrecife
+      strcpy(pokemon_i.especie,""); strcpy(pokemon_i.color,"");
+      pokemon_i.velocidad = pokemon_i.peso = -1;
+      arrecife->pokemon[ seleccion[i] ] = pokemon_i;
 
     }
   }
