@@ -1,26 +1,19 @@
 #include <stdlib.h>
 #include "evento_pesca.h"
 
-typedef char string [50];
+#define MAX_STRING_SIZE 50
+typedef char string [MAX_STRING_SIZE];
 const string FORMATO_LECTURA_POKEMON = "%[^;];%i;%i;%[^\n]\n";
 //const string FORMATO_ESCRITURA_POKEMON = "%s;%i;%i;%s\n";
 
+/// DECLARACIONES PRIVADAS
 
-int leer_pokemon( FILE* archivo, pokemon_t* pokemon ){
+// Lee un pokemon de un archivo formateado scsv correctamente
+// Devuelve el estado de la lectura ( 0 = Error )
+int leer_pokemon( FILE* archivo, pokemon_t* pokemon );
 
-  return fscanf( archivo, FORMATO_LECTURA_POKEMON, pokemon->especie, &pokemon->velocidad, &pokemon->peso, pokemon->color ) == 4 ;
-}
+/// IMPLEMENTACIONES PUBLICAS
 
-/*
- * Función que dado un archivo carga los pokémon que viven en el arrecife
- * reservando la memoria necesaria para el mismo. Se debe intentar leer la mayor
- * cantidad posible de registros del archivo. Al encontrar el primer registro
- * erróneo (o al llegar al final del archivo) se deben finalizar la lectura y
- * crear el arrecife con los pokémon leídos exitosamente. En caso de no
- * encontrar ningún registro con el formato correcto, se debe devolver error.
- * Devuelve un puntero a un arrecife válido o NULL en caso de error.
- * Es importante notar que tanto
- */
 arrecife_t* crear_arrecife(const char* ruta_archivo){
 
   FILE* archivo = fopen(ruta_archivo, "r");
@@ -52,12 +45,16 @@ arrecife_t* crear_arrecife(const char* ruta_archivo){
   return nuevo_arrecife;
 }
 
-/*
- * Función que crea un acuario vacío reservando la memoria necesaria para el mismo.
- * Devuelve el acuario o NULL en caso de error.
- */
 acuario_t* crear_acuario(){
-  return NULL;
+
+  acuario_t* nuevo_acuario = malloc( sizeof(acuario_t) );
+  if(!nuevo_acuario) return NULL;
+
+  nuevo_acuario->pokemon = NULL;
+  nuevo_acuario->cantidad_pokemon = 0;
+
+  return nuevo_acuario;
+
 }
 
 /*
@@ -74,12 +71,20 @@ acuario_t* crear_acuario(){
  * Devuelve -1 en caso de error o 0 en caso contrario.
  */
 int trasladar_pokemon(arrecife_t* arrecife, acuario_t* acuario, bool (*seleccionar_pokemon) (pokemon_t*), int cant_seleccion){
+
+  int i, seleccionados=0;
+  for( i=0; i < arrecife->cantidad_pokemon; i++){
+
+    if( seleccionados<cant_seleccion && seleccionar_pokemon( &(arrecife->pokemon[i]) ) ){
+      printf("%s\n",arrecife->pokemon[i].especie );
+      seleccionados++;
+    }
+
+  }
+
   return 0;
 }
 
-/*
- * Procedimiento que dado un arrecife deberá mostrar por pantalla a todos los pokemon que contiene.
- */
 void censar_arrecife(arrecife_t* arrecife, void (*mostrar_pokemon)(pokemon_t*)){
 
   if( !arrecife || !arrecife->pokemon)
@@ -94,25 +99,38 @@ void censar_arrecife(arrecife_t* arrecife, void (*mostrar_pokemon)(pokemon_t*)){
   return;
 }
 
-/*
- * Función que dado un acuario guarda en un archivo de texto a los pokemones que contiene.
- * Devuelve 0 si se realizo con éxito o -1 si hubo algun problema para guardar el archivo.
- */
 int guardar_datos_acuario(acuario_t* acuario, const char* nombre_archivo){
+
+  if( !acuario || !acuario->pokemon)
+    return -2;
+
+  FILE* archivo = fopen( nombre_archivo, "w" );
+
+  int i;
+  pokemon_t pokemon_i;
+
+  for( i=0; i < acuario->cantidad_pokemon; i++ ){
+    pokemon_i = acuario->pokemon[i];
+    fprintf(archivo,"%s;%i;%i;%s\n",pokemon_i.especie, pokemon_i.velocidad, pokemon_i.peso, pokemon_i.color );
+  }
+
+  fclose( archivo );
+
   return 0;
 }
 
-/*
- * Libera la memoria que fue reservada para el acuario.
- */
 void liberar_acuario(acuario_t* acuario){
 
+  if( !acuario )
+    return;
+
+  if( acuario->pokemon )
+    free( acuario->pokemon );
+
+  free( acuario );
   return;
 }
 
-/*
- * Libera la memoria que fue reservada para el arrecife.
- */
 void liberar_arrecife(arrecife_t* arrecife){
 
   if( !arrecife )
@@ -123,4 +141,11 @@ void liberar_arrecife(arrecife_t* arrecife){
 
   free( arrecife );
   return;
+}
+
+/// IMPLEMENTACIONES PRIVADAS
+
+int leer_pokemon( FILE* archivo, pokemon_t* pokemon ){
+
+  return fscanf( archivo, FORMATO_LECTURA_POKEMON, pokemon->especie, &pokemon->velocidad, &pokemon->peso, pokemon->color ) == 4 ;
 }

@@ -4,30 +4,78 @@
 #include <time.h>
 #include "evento_pesca.h"
 
-typedef char string [50];
+#define MAX_STRING_SIZE 50
+typedef char string [MAX_STRING_SIZE];
 
 const string ARCHIVO_ARRECIFE_DEFAULT = "arrecife.txt";
+const string ARCHIVO_ACUARIO_DEFAULT = "acuario.txt";
+
+/// DECLARACIONES
+
+//FUNCIONES DE SELECCION
+
+bool seleccionar_todos( pokemon_t* pokemon );
+bool seleccionar_velocez( pokemon_t* pokemon );
+bool seleccionar_pesados( pokemon_t* pokemon );
+bool seleccionar_dorados( pokemon_t* pokemon );
+
+// FUNCIONES DE VISUALIZACION
+
+void datos_pokemon( pokemon_t* pokemon );
 
 
-void datos_pokemon( pokemon_t* pokemon ){
-
-  printf("%s , %i , %i , %s \n", pokemon->especie, pokemon->velocidad, pokemon->peso, pokemon->color );
-  return;
-}
-
+/// MAIN
 
 int main(int argc, char const *argv[]) {
 
   srand( (unsigned int) time(NULL) );
 
   arrecife_t* arrecife = crear_arrecife( ARCHIVO_ARRECIFE_DEFAULT );
-  if( !arrecife ) return -1;
+  acuario_t* acuario = crear_acuario();
+  if( !arrecife || !acuario ){
+    liberar_arrecife( arrecife );
+    liberar_acuario( acuario );
+    return -1;
+  }
 
   censar_arrecife( arrecife, datos_pokemon );
 
+  trasladar_pokemon( arrecife, acuario, seleccionar_todos, 5);
+  printf("\n");
+  trasladar_pokemon( arrecife, acuario, seleccionar_velocez, 5);
+  printf("\n");
+  trasladar_pokemon( arrecife, acuario, seleccionar_pesados, 5);
+  printf("\n");
+
   liberar_arrecife( arrecife );
+  liberar_acuario( acuario );
 
   return 0;
+}
+
+/// IMPLEMENTACIONES
+
+//FUNCIONES DE SELECCION
+
+bool seleccionar_todos( pokemon_t* pokemon ){
+  return true;
+}
+bool seleccionar_velocez( pokemon_t* pokemon ){
+  return pokemon->velocidad > 50;
+}
+bool seleccionar_pesados( pokemon_t* pokemon ){
+  return pokemon->peso > 50;
+}
+bool seleccionar_dorados( pokemon_t* pokemon ){
+  return !strcmp(pokemon->color,"Dorado");
+}
+
+// FUNCIONES DE VISUALIZACION
+
+void datos_pokemon( pokemon_t* pokemon ){
+
+  printf("%s , %i , %i , %s \n", pokemon->especie, pokemon->velocidad, pokemon->peso, pokemon->color );
+  return;
 }
 
 /*
