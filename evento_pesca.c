@@ -26,6 +26,10 @@ int agregar_pokemon( acuario_t* acuario, pokemon_t pokemon );
 // Devuelve si es in pokemon valido
 bool pokemon_valido( pokemon_t pokemon );
 
+// Elimina los pokemones invalidos del arrecife y lo achica
+// Devuelve 0 si falla
+int limpiar_invalidos( arrecife_t* arrecife );
+
 /// IMPLEMENTACIONES PUBLICAS
 
 arrecife_t* crear_arrecife(const char* ruta_archivo){
@@ -92,6 +96,8 @@ int trasladar_pokemon(arrecife_t* arrecife, acuario_t* acuario, bool (*seleccion
     }
   }
 
+  limpiar_invalidos( arrecife );
+
   return 0;
 }
 
@@ -107,7 +113,7 @@ void censar_arrecife(arrecife_t* arrecife, void (*mostrar_pokemon)(pokemon_t*)){
       pokemones++;
     }
   }
-  printf("\n-El arrecife contiene %i pokemones \n\n", pokemones );
+  printf("\n-El arrecife contiene %i (%i) pokemones \n\n", pokemones, arrecife->cantidad_pokemon );
 
   return;
 }
@@ -180,6 +186,28 @@ int agregar_pokemon( acuario_t* acuario, pokemon_t pokemon ){
   if(!aux) return 0;
   acuario->pokemon = aux;
   acuario->pokemon[acuario->cantidad_pokemon ++] = pokemon;
+
+  return 1;
+}
+
+int limpiar_invalidos( arrecife_t* arrecife ){
+
+  size_t i=0,j=0;
+  pokemon_t pokemon_i;
+
+  for( i=0; i< arrecife->cantidad_pokemon; i++ ){
+
+    pokemon_i = arrecife->pokemon[i];
+    if( pokemon_valido(pokemon_i) )
+      arrecife->pokemon[ j++ ] = pokemon_i;
+
+  }
+
+  arrecife->cantidad_pokemon = (int)j;
+  void* aux = realloc( arrecife->pokemon , sizeof(pokemon_t)*j );
+  if( !aux ) return 0;
+
+  arrecife->pokemon = aux;
 
   return 1;
 }
