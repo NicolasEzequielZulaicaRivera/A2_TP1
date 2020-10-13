@@ -169,7 +169,8 @@ void liberar_arrecife(arrecife_t* arrecife){
 int leer_pokemon( FILE* archivo, pokemon_t* pokemon ){
 
   return fscanf( archivo, FORMATO_LECTURA_POKEMON, pokemon->especie, &pokemon->velocidad, &pokemon->peso, pokemon->color ) == 4
-    && !strchr( pokemon->especie, '\n' );
+    && !strchr( pokemon->especie, '\n' )
+    && !strchr( pokemon->color, ';' );
 }
 
 bool pokemon_valido( pokemon_t pokemon ){
