@@ -11,7 +11,7 @@ const string ARCHIVO_ARRECIFE_DEFAULT = "arrecife.txt";
 const string ARCHIVO_ACUARIO_DEFAULT = "acuario.txt";
 
 const string ESTILOS [] = { "\e[1;100m", "\e[1;108m" };
-const string RESET =  "\e[0m";
+const string RESET = "\e[0m";
 
 /// DECLARACIONES
 
@@ -44,13 +44,15 @@ int main(int argc, char const *argv[]) {
   censar_arrecife( arrecife, datos_pokemon );
 
   trasladar_pokemon( arrecife, acuario, seleccionar_todos, 5);
-  printf("\n");
+  censar_arrecife( arrecife, datos_pokemon );
   trasladar_pokemon( arrecife, acuario, seleccionar_velocez, 5);
-  printf("\n");
+  censar_arrecife( arrecife, datos_pokemon );
+
   trasladar_pokemon( arrecife, acuario, seleccionar_pesados, 5);
-  printf("\n");
+  censar_arrecife( arrecife, datos_pokemon );
+
   trasladar_pokemon( arrecife, acuario, seleccionar_dorados, 5);
-  printf("\n");
+  censar_arrecife( arrecife, datos_pokemon );
 
   guardar_datos_acuario( acuario, ARCHIVO_ACUARIO_DEFAULT);
 

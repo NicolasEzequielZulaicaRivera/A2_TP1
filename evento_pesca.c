@@ -5,7 +5,6 @@
 #define MAX_STRING_SIZE 50
 typedef char string [MAX_STRING_SIZE];
 const string FORMATO_LECTURA_POKEMON = "%[^;];%i;%i;%[^\n]\n";
-//const string FORMATO_ESCRITURA_POKEMON = "%s;%i;%i;%s\n";
 
 /// DECLARACIONES PRIVADAS
 
