@@ -8,6 +8,31 @@ typedef char string [50];
 
 const string ARCHIVO_ARRECIFE_DEFAULT = "arrecife.txt";
 
+
+void datos_pokemon( pokemon_t* pokemon ){
+
+  printf("%s , %i , %i , %s \n", pokemon->especie, pokemon->velocidad, pokemon->peso, pokemon->color );
+  return;
+}
+
+
+int main(int argc, char const *argv[]) {
+
+  srand( (unsigned int) time(NULL) );
+  arrecife_t* arrecife = NULL;
+
+  arrecife = crear_arrecife( ARCHIVO_ARRECIFE_DEFAULT );
+
+  if( arrecife )
+    printf("si\n");
+
+  //censar_arrecife( arrecife, datos_pokemon );
+
+  //liberar_arrecife( arrecife);
+
+  return 0;
+}
+
 /*
 void pokreate( int n ){
   string pknames [] = { "Magikarp","Gyarados","Tentacool","Tentacruel","Goldeen","Seaking","Wailmer","Wailord","Kyogre" };
@@ -25,12 +50,7 @@ void pokreate( int n ){
 }
 */
 
-void datos_pokemon( pokemon_t* pokemon ){
-
-  printf("%s , %i , %i , %s \n", pokemon->especie, pokemon->velocidad, pokemon->peso, pokemon->color );
-  return;
-}
-
+/*
 void test_arrecife(){
 
   string pknames [] = { "Magikarp","Gyarados","Tentacool","Tentacruel","Goldeen","Seaking","Wailmer","Wailord","Kyogre" };
@@ -60,21 +80,4 @@ void test_arrecife(){
   censar_arrecife( &tst, datos_pokemon );
 
 }
-
-
-
-int main(int argc, char const *argv[]) {
-
-  srand( (unsigned int) time(NULL) );
-  //arrecife_t* arrecife = NULL;
-
-  /*arrecife = crear_arrecife( ARCHIVO_ARRECIFE_DEFAULT );
-
-  censar_arrecife( arrecife, datos_pokemon );
-
-  liberar_arrecife( arrecife);*/
-
-  test_arrecife();
-
-  return 0;
-}
+*/

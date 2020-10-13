@@ -1,4 +1,9 @@
+#include <stdlib.h>
 #include "evento_pesca.h"
+
+typedef char string [50];
+const string FORMATO_LECTURA_POKEMON = "%[^;];%i;%i;%[^\n]\n";
+//const string FORMATO_ESCRITURA_POKEMON = "%s;%i;%i;%s\n";
 
 /*
  * Función que dado un archivo carga los pokémon que viven en el arrecife
@@ -11,6 +16,21 @@
  * Es importante notar que tanto
  */
 arrecife_t* crear_arrecife(const char* ruta_archivo){
+
+  FILE* archivo = fopen(ruta_archivo, "r");
+  if( !archivo )
+    return NULL;
+
+  pokemon_t aux;
+  int i =0;
+
+  while (
+    fscanf( archivo, FORMATO_LECTURA_POKEMON, aux.especie, &aux.velocidad, &aux.peso, aux.color ) == 4
+  ) {
+    printf("%i%s\n",++i, aux.especie );
+  }
+
+  fclose(archivo);
 
   return NULL;
 }
@@ -45,11 +65,14 @@ int trasladar_pokemon(arrecife_t* arrecife, acuario_t* acuario, bool (*seleccion
  */
 void censar_arrecife(arrecife_t* arrecife, void (*mostrar_pokemon)(pokemon_t*)){
 
+  if( !arrecife )
+    return;
 
-  for( int i=0; i < arrecife->cantidad_pokemon; i++ ){
+  int i;
+  for( i=0; i < arrecife->cantidad_pokemon; i++ ){
     mostrar_pokemon( & (arrecife->pokemon[i]) );
-    printf("---- %i / %i\n",i,arrecife->cantidad_pokemon);
   }
+  printf("\n-El arrecife contiene %i pokemones \n", i );
 
   return;
 }
@@ -66,6 +89,7 @@ int guardar_datos_acuario(acuario_t* acuario, const char* nombre_archivo){
  * Libera la memoria que fue reservada para el acuario.
  */
 void liberar_acuario(acuario_t* acuario){
+
   return;
 }
 
@@ -73,5 +97,13 @@ void liberar_acuario(acuario_t* acuario){
  * Libera la memoria que fue reservada para el arrecife.
  */
 void liberar_arrecife(arrecife_t* arrecife){
+
+  if( !arrecife )
+    return;
+
+  if( arrecife->pokemon )
+    free( arrecife->pokemon );
+
+  free( arrecife );
   return;
 }
