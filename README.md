@@ -31,7 +31,20 @@
 
 ## Compilacion y Ejecution
 
-  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean gravida tincidunt mi. Aliquam erat volutpat. Quisque finibus mattis ligula, at tristique ipsum finibus sed. In eget tincidunt velit, at finibus sem. Curabitur tristique nunc tellus, nec iaculis eros placerat quis. Aliquam libero diam, blandit gravida imperdiet in, tincidunt ut nunc. Integer maximus tincidunt finibus. Nulla facilisi. In sed enim nulla.
+  Habiendo incluido la libreria en su programa o descargado el main.c proveido, 
+  puede compilarlo con la siguiente linea en la terminal :
+  
+  ` gcc *.c -Wall -Werror -Wconversion -std=c99 -o nombre_programa `
+  > usaremos el compilador gcc nativo a cualquier distribucion linux para compilar todos los archivos c (\*.c)
+    en el directorio, empleando diversos *flags* para prevenir errores, 
+    queda a discrecion del usuario elegir el nombre del programa
+    
+  Luego puede ejecutar el programa con la siguiente linea:
+  
+  `./nombre_programa`
+  
+  Cabe aclarar que la terminal debe encontrarse en el directorio donde se encuentran los archivos del programa
+  para poder llevar su compilacion y ejecucion a cabo.
 
 ## Conceptos
   
