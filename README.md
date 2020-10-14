@@ -122,3 +122,7 @@
   sin cambiar su contenido y devuelve la nueva posicion del bloque  
   ( en caso de que halla cambiado ), liberando la anterior.
   En caso de fallar devolvera NULL y no liberara memoria.
+  
+  ---
+  
+  ![image](https://pbs.twimg.com/media/EjCB_tLX0AQ0MJq.jpg)
