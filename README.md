@@ -53,16 +53,62 @@
 ## Conceptos
   
   ### Punteros
-    Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
-    Aenean gravida tincidunt mi. Aliquam erat volutpat. 
-    Quisque finibus mattis ligula, at tristique ipsum finibus sed.
+  Es un tipo de dato nativo de C que almcena posiciones de memoria.
+  Esto nos permite "apuntar" a variables o estructuras para acceder y/o modificar su informacion.
+  ( Posterioemente se explica punteros a funciones )
+    
+  *Ejemplo:*
+    
+   ```C
+   int numero = 0;
+   int* puntero_a_numero = &numero;
+    
+   *puntero_a_numero = 1;
+   printf("%i", numero ); // mostrara 1
+   ```
     
   ### Aritmetica de punteros
-    Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
-    Aenean gravida tincidunt mi. Aliquam erat volutpat. 
-    Quisque finibus mattis ligula, at tristique ipsum finibus sed.
+  Es el empleo de las operaciones de suma y resta en punteros. 
+  Esto hara que la posicion de memoria a la que "apunta" el puntero afectado incremente ( o decremente )
+  una cantidad de bytes dada como : el numero sumado multiplicado por el tamaño del tipo de dato al que apunta el puntero.
+  El funcionamiento de la aritmetca de punteros es analogo a la operacion con notacion de  arreglos. 
+  
+  *Ejemplo:*
+  
+  ```C
+  char abecedario [] = "abcdefghijklmopqrstuvwxyz";
+  char* puntero = abecedario;
+  
+  for( int i=0; i<10; i++ )
+    printf( "%c", *(puntero+i) ); // mostrara abcdefghij
+    
+  // Es equivalente a
+  
+  for( int i=0; i<10; i++ )
+    printf( "%c", puntero[i] ); // mostrara abcdefghij
+  ```
     
   ### Punteros a funciones
-    Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
-    Aenean gravida tincidunt mi. Aliquam erat volutpat. 
-    Quisque finibus mattis ligula, at tristique ipsum finibus sed.
+  De manera similar a como podemos referenciar variables, 
+  podemos referenciar funciones mediante el uso de punteros void ( `void* ` ).
+  Podemos entonces tener funciones "variables" en nuestro flujo que pueden ser asignadas mediante punteros o pasadas por parametro.
+  Estos punteros requieren una firma y solo se les podra asignar funciones que cumplan dicha firma.
+  
+  *Ejemplo:*
+  ```C
+  int sumar( int a, int b ) return a + b;
+  int restar( int a, int b ) return a - b;
+  
+  int * operacion (int,int);
+  
+  operacion = suma;
+  printf( "%i", operacion(2,1) );//muestra 3
+  
+  operacion = resta;
+  printf( "%i", operacion(2,1) );//muestra 1
+  ```
+    
+  ### Malloc y Realloc
+  Estas funciones de C estan incluidas en la libreria `stdlib`
+  * `Malloc(---)`
+  * `Realloc(---)`
