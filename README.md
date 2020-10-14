@@ -110,5 +110,15 @@
     
   ### Malloc y Realloc
   Estas funciones de C estan incluidas en la libreria `stdlib`
-  * `Malloc(---)`
-  * `Realloc(---)`
+  
+  `void *malloc(size_t size)`
+   
+   Reserva `size` bytes de memoria dinamica y devuelve un puntero que apunta a esta memoria.
+   En caso de fallar devolvera NULL;
+       
+  `void *realloc(void *ptr, size_t size)`
+  
+  Cambia el tamaño del bloque de memoria al que apunta el puntero `ptr` a `size` bytes 
+  sin cambiar su contenido y devuelve la nueva posicion del bloque  
+  ( en caso de que halla cambiado ), liberando la anterior.
+  En caso de fallar devolvera NULL y no liberara memoria.
