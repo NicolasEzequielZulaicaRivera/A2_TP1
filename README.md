@@ -4,7 +4,30 @@
 
 ## Funcionamiento
 
-  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean gravida tincidunt mi. Aliquam erat volutpat. Quisque finibus mattis ligula, at tristique ipsum finibus sed. In eget tincidunt velit, at finibus sem. Curabitur tristique nunc tellus, nec iaculis eros placerat quis. Aliquam libero diam, blandit gravida imperdiet in, tincidunt ut nunc. Integer maximus tincidunt finibus. Nulla facilisi. In sed enim nulla.
+  Se crea la libreria **evento_pesca.h** con el objetivo de simular el translado de pokemones de un arrecife a un acuario.
+  
+  Para ello se implementan las siguientes estructuras :
+  * `Pokemon`
+  * `Arrecife`
+  * `Acuario`
+  
+  Y las siguientes funcionalidades:
+  * `crear_arrecife` : reserva memoria para el arrecife y carga los pokemones de un archivo dado
+  * `crear_acuario` : reserva memoria para el acuario
+  * `transladar_pokemon` : trasnlada los pokemones que cumplan un criterio dado de un arrecife a un acuario
+  * `censar_arrecife` : muestra los pokemon contenidos en un arrecife
+  * `guardar_datos_acuario` : exporta un listado de pokemones de un acuario
+  * `liberar_acuario` : libera la memoria reservada para un acuario
+  * `liberar_arrecife` :  libera la memoria reservada para un arrecife
+  
+  Queda a libertad del usuario crear las funciones de *visualizacion* y *seleccion* de pokemones.
+  
+  **Importante :** Las funciones implementadas reservan *memoria dinamica* para la utilizacion de las estructuras, 
+  por lo que es imperativo que esta se libere antes de finalizar el programa. 
+  Esto se realiza mediante el uso de las funciones `liberar_acuario` y `liberar_arrecife` 
+  para *todos* los acuarios y arrecifes creados en su programa.
+  
+  Se añade el archivo **main.c** como ejemplo de implementacion de la libreria.
 
 ## Compilacion y Ejecution
 
