@@ -45,6 +45,10 @@
   
   Cabe aclarar que la terminal debe encontrarse en el directorio donde se encuentran los archivos del programa
   para poder llevar su compilacion y ejecucion a cabo.
+  
+  Se recomienda  emplear un **makefile** para agilizar estas tareas. 
+  Se añade en los archivos un makefile que nos permitira usar la linea `make run`
+  que compilara (de ser necesario) y ejecutara el programa.
 
 ## Conceptos
   
