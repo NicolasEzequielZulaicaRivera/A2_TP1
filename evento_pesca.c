@@ -95,7 +95,6 @@ int trasladar_pokemon(arrecife_t* arrecife, acuario_t* acuario, bool (*seleccion
       pokemon_i = arrecife->pokemon[ seleccion[i] ];
 
       if( ! agregar_pokemon( acuario, pokemon_i) ){
-        printf("Fallo al agregar pokemon\n" );
         return -1;
       };
 
@@ -103,9 +102,7 @@ int trasladar_pokemon(arrecife_t* arrecife, acuario_t* acuario, bool (*seleccion
     }
 
     limpiar_invalidos( arrecife );
-    printf("- Se transladaron %lu pokemon\n", seleccionados );
   } else {
-    printf("- No se transladaron pokemon\n");
     return -1;
   }
   return 0;
@@ -116,7 +113,6 @@ void censar_arrecife(arrecife_t* arrecife, void (*mostrar_pokemon)(pokemon_t*)){
   if( !arrecife || !arrecife->pokemon)
     return;
 
-  printf("\n");
   int i, pokemones = 0;
   for( i=0; i < arrecife->cantidad_pokemon; i++ ){
     if( pokemon_valido(arrecife->pokemon[i]) ){
@@ -124,7 +120,6 @@ void censar_arrecife(arrecife_t* arrecife, void (*mostrar_pokemon)(pokemon_t*)){
       pokemones++;
     }
   }
-  printf("\n- El arrecife contiene %i (%i) pokemones \n\n", pokemones, arrecife->cantidad_pokemon );
 
   return;
 }
