@@ -2,7 +2,7 @@
 #include <string.h>
 #include "evento_pesca.h"
 
-#define MAX_STRING_SIZE 50
+#define MAX_STRING_SIZE 51
 typedef char string [MAX_STRING_SIZE];
 const string FORMATO_LECTURA_POKEMON = "%50[^;];%i;%i;%50[^\n]\n";
 
@@ -57,8 +57,12 @@ arrecife_t* crear_arrecife(const char* ruta_archivo){
     i++;
   }
   nuevo_arrecife->cantidad_pokemon = (int)i;
-
   fclose(archivo);
+
+  if( !i ){
+    liberar_arrecife(nuevo_arrecife);
+    return NULL;
+  }
 
   return nuevo_arrecife;
 }
@@ -90,14 +94,20 @@ int trasladar_pokemon(arrecife_t* arrecife, acuario_t* acuario, bool (*seleccion
     for( i=0; i<seleccionados; i++ ){
       pokemon_i = arrecife->pokemon[ seleccion[i] ];
 
-      if( ! agregar_pokemon( acuario, pokemon_i) ) return -1;
+      if( ! agregar_pokemon( acuario, pokemon_i) ){
+        printf("Fallo al agregar pokemon\n" );
+        return -1;
+      };
 
       arrecife->pokemon[ seleccion[i] ] = POKEMON_INVALIDO;
     }
+
+    limpiar_invalidos( arrecife );
+    printf("- Se transladaron %lu pokemon\n", seleccionados );
+  } else {
+    printf("- No se transladaron pokemon\n");
+    return -1;
   }
-
-  limpiar_invalidos( arrecife );
-
   return 0;
 }
 
@@ -106,6 +116,7 @@ void censar_arrecife(arrecife_t* arrecife, void (*mostrar_pokemon)(pokemon_t*)){
   if( !arrecife || !arrecife->pokemon)
     return;
 
+  printf("\n");
   int i, pokemones = 0;
   for( i=0; i < arrecife->cantidad_pokemon; i++ ){
     if( pokemon_valido(arrecife->pokemon[i]) ){
@@ -113,14 +124,14 @@ void censar_arrecife(arrecife_t* arrecife, void (*mostrar_pokemon)(pokemon_t*)){
       pokemones++;
     }
   }
-  printf("\n-El arrecife contiene %i (%i) pokemones \n\n", pokemones, arrecife->cantidad_pokemon );
+  printf("\n- El arrecife contiene %i (%i) pokemones \n\n", pokemones, arrecife->cantidad_pokemon );
 
   return;
 }
 
 int guardar_datos_acuario(acuario_t* acuario, const char* nombre_archivo){
 
-  if( !acuario || !acuario->pokemon)
+  if( !acuario )
     return -2;
 
   FILE* archivo = fopen( nombre_archivo, "w" );
@@ -130,9 +141,11 @@ int guardar_datos_acuario(acuario_t* acuario, const char* nombre_archivo){
   int i;
   pokemon_t pokemon_i;
 
-  for( i=0; i < acuario->cantidad_pokemon; i++ ){
-    pokemon_i = acuario->pokemon[i];
-    fprintf(archivo,"%s;%i;%i;%s\n",pokemon_i.especie, pokemon_i.velocidad, pokemon_i.peso, pokemon_i.color );
+  if( acuario->pokemon && acuario->cantidad_pokemon ){
+    for( i=0; i < acuario->cantidad_pokemon; i++ ){
+      pokemon_i = acuario->pokemon[i];
+      fprintf(archivo,"%s;%i;%i;%s\n",pokemon_i.especie, pokemon_i.velocidad, pokemon_i.peso, pokemon_i.color );
+    }
   }
 
   fclose( archivo );
@@ -204,11 +217,14 @@ int limpiar_invalidos( arrecife_t* arrecife ){
 
   }
 
-  arrecife->cantidad_pokemon = (int)j;
-  void* aux = realloc( arrecife->pokemon , sizeof(pokemon_t)*j );
-  if( !aux ) return 0;
+  if( arrecife->cantidad_pokemon != (int)j ){
+    arrecife->cantidad_pokemon = (int)j;
+    void* aux = realloc( arrecife->pokemon , sizeof(pokemon_t)*j );
+    if( !aux && j ) return 0;
 
-  arrecife->pokemon = aux;
+    arrecife->pokemon = aux;
+    if( !j ) arrecife->pokemon = NULL;
+  }
 
   return 1;
 }
