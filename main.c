@@ -32,7 +32,7 @@ void datos_pokemon( pokemon_t* pokemon );
 
 /// MAIN
 
-int main1(int argc, char const *argv[]) {
+int main(int argc, char const *argv[]) {
 
   srand( (unsigned int) time(NULL) );
 
