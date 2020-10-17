@@ -32,35 +32,7 @@ void datos_pokemon( pokemon_t* pokemon );
 
 /// MAIN
 
-int main() {
-
-  srand( (unsigned int) time(NULL) );
-
-  arrecife_t* arrecife = crear_arrecife( ARCHIVO_ARRECIFE_DEFAULT );
-  acuario_t* acuario = crear_acuario();
-  if( !arrecife || !acuario ){
-    liberar_arrecife( arrecife );
-    liberar_acuario( acuario );
-    printf("Fallo al crear arrecife | acuario\n");
-    return -1;
-  }
-
-  censar_arrecife( arrecife, tabla_pokemon );
-
-  trasladar_pokemon( arrecife, acuario, seleccionar_magikarp, 1);
-  censar_arrecife( arrecife, tabla_pokemon );
-
-  guardar_datos_acuario( acuario, ARCHIVO_ACUARIO_DEFAULT);
-
-  liberar_arrecife( arrecife );
-  liberar_acuario( acuario );
-
-  return 0;
-
-  return 0;
-}
-
-/*int main1(int argc, char const *argv[]) {
+int main1(int argc, char const *argv[]) {
 
   srand( (unsigned int) time(NULL) );
 
@@ -95,7 +67,7 @@ int main() {
   liberar_acuario( acuario );
 
   return 0;
-}*/
+}
 
 /// IMPLEMENTACIONES
 
