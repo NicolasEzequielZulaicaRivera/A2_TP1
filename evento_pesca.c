@@ -81,6 +81,9 @@ acuario_t* crear_acuario(){
 
 int trasladar_pokemon(arrecife_t* arrecife, acuario_t* acuario, bool (*seleccionar_pokemon) (pokemon_t*), int cant_seleccion){
 
+  if( !arrecife || !arrecife->pokemon || !acuario )
+    return -1;
+  
   size_t i, seleccionados=0;
   size_t seleccion [cant_seleccion];
   pokemon_t pokemon_i;
